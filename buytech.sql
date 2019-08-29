@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 20, 2019 at 11:27 PM
--- Server version: 10.1.32-MariaDB
--- PHP Version: 7.2.5
+-- Generation Time: Aug 29, 2019 at 07:30 PM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -89,8 +89,8 @@ CREATE TABLE `laptop` (
 --
 
 INSERT INTO `laptop` (`id`, `brand`, `name`, `des`, `stock`, `price`, `img_name`) VALUES
-(39, 'Apple', 'MacBook Pro 2019', 'One Of the Poweful Laptop Ever', 13, 1550000, '15619061244502817825d18cbcca45c6.jpg'),
-(40, 'Hp', 'Specture X360', 'One of the best', 10, 120000, '15606237069996877595d053a5a473ab.jpg'),
+(39, 'Apple', 'MacBookPro', 'One Of the Poweful Laptop Ever', 13, 1550000, '15619061244502817825d18cbcca45c6.jpg'),
+(40, 'Hp', 'Spc X360', 'One of the best', 10, 120000, '15606237069996877595d053a5a473ab.jpg'),
 (41, 'Dell', 'XPS 13', 'Best For Student', 12, 130000, '15606237373473232495d053a79eb5c7.jpg'),
 (42, 'Assus', 'ROG', 'Best for gamming', 5, 110000, '15606239528182245035d053b50b9199.jpg'),
 (43, 'Accer', 'Nitro', 'Best for gamming', 4, 700000, '15606239856416007435d053b714e185.jpg'),
@@ -113,8 +113,27 @@ CREATE TABLE `order_history` (
   `phone` int(30) NOT NULL,
   `date_time` datetime NOT NULL,
   `type` int(11) NOT NULL,
-  `shipment` int(11) NOT NULL DEFAULT '0'
+  `shipment` int(11) NOT NULL DEFAULT 0,
+  `payment` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_history`
+--
+
+INSERT INTO `order_history` (`id`, `order_number`, `username`, `item`, `quantity`, `price`, `address`, `phone`, `date_time`, `type`, `shipment`, `payment`) VALUES
+(25, 718877, 'Risad482', 'MacBook Pro 2019', 2, '3100000', 'Dhaka', 1302555169, '2019-07-21 22:00:13', 1, 1, 'cash on delivery'),
+(26, 810016, 'Risad482', 'XPS 13', 1, '130000', 'Dhaka', 1673119301, '2019-07-21 22:11:43', 1, 1, 'cash on delivery'),
+(27, 184555, 'Pipo9', 'MacBook Pro 2019', 1, '1550000', '1/a sgsj', 1950092533, '2019-07-22 13:48:53', 1, 1, 'cash on delivery'),
+(28, 328817, 'niloy', 'MacBook Pro 2019', 1, '1550000', 'Gazipur', 1752836632, '2019-07-23 17:00:39', 1, 1, 'cash on delivery'),
+(30, 196963, 'ktareq', 'MacBook Pro 2019', 1, '1550000', 'mirpur', 17, '2019-07-31 02:47:58', 1, 0, 'cash on delivery'),
+(34, 210207, 'pranto', 'Specture X360', 1, '120000', 'Bashundhara Residential Area', 1629710423, '2019-08-21 08:22:52', 1, 1, 'cash on delivery'),
+(35, 239663, 'pranto', ' Galaxy Tab S4', 2, '130000', 'Bashundhara Residential Area', 1629710423, '2019-08-21 08:33:02', 1, 1, 'cash on delivery'),
+(37, 981725, 'pranto', 'XPS 13', 2, '260000', 'Bashundhara Residential Area', 1629710423, '2019-08-21 09:12:26', 1, 1, 'cash on delivery'),
+(38, 981725, 'pranto', 'Spc X360', 1, '120000', 'Bashundhara Residential Area', 1629710423, '2019-08-21 09:12:26', 0, 0, 'cash on delivery'),
+(39, 214929, 'pranto', 'iPhone XS', 1, '130000', 'Bashundhara Residential Area', 1629710423, '2019-08-26 12:22:20', 0, 0, 'cash on delivery'),
+(40, 214929, 'pranto', 'MacBookPro', 1, '1550000', 'Bashundhara Residential Area', 1629710423, '2019-08-26 12:22:20', 0, 0, 'cash on delivery'),
+(41, 101666, 'pranto', 'Spc X360', 1, '120000', 'Bashundhara Residential Area', 1629710423, '2019-08-28 14:20:19', 0, 0, 'cash on delivery');
 
 -- --------------------------------------------------------
 
@@ -138,7 +157,7 @@ CREATE TABLE `phone` (
 
 INSERT INTO `phone` (`id`, `brand`, `name`, `des`, `stock`, `price`, `img_name`) VALUES
 (501, 'iPhone', 'iPhone XS', 'Best Phone Ever', 10, 130000, '15611505931528133495d0d44815f741.jpg'),
-(502, 'Samsung', 'Samsung Galaxy S10', 'Best Phone Ever', 12, 100000, '1561150655765186195d0d44bf750ed.jpg'),
+(502, 'Samsung', 'Galaxy S10', 'Best Phone Ever', 12, 100000, '1561150655765186195d0d44bf750ed.jpg'),
 (503, 'Xiomi', 'Mi9', 'Best Phone Ever', 3, 30000, '156115069317523093125d0d44e50f02f.jpg'),
 (504, 'OnePlus', 'OnePlus 7 Pro', 'Best Phone Ever', 5, 70000, '15611503165362008025d0d436c6cbcf.jpg'),
 (505, 'Huawei', 'Huawei P30 Pro', 'good', 3, 80000, '156365547319688007285d337d312f016.jpg');
@@ -159,17 +178,23 @@ CREATE TABLE `signup` (
   `address` text NOT NULL,
   `phone` int(30) NOT NULL,
   `zipcode` varchar(10) NOT NULL,
-  `type` varchar(30) NOT NULL
+  `type` varchar(30) NOT NULL,
+  `card` int(30) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `signup`
 --
 
-INSERT INTO `signup` (`id`, `first_name`, `last_name`, `username`, `email`, `password`, `address`, `phone`, `zipcode`, `type`) VALUES
-(1, 'Md. Abu Horyra', 'Pranto', 'pranto', 'mahpranto@outlook.com', '$2y$10$/mwCn9fPLFBOLaJYNIqoguW.Wmg7ZexFAC.hPDMwRWEe5tmWybcA6', 'Bashundhara Residential Area', 1629710423, '1229', 'public'),
-(2, 'Shakib', 'Rahman', 'shakib', 'shakib@gmail.com', '$2y$10$Nx64OxTNaFlvdqOHFayGzeCmg9gl/lobMV1d9PeoG/ppflGBXkf/S', 'Bashundhara R/A', 1732533232, '1229', 'public'),
-(3, 'sdg', 'sdg', 'dgfhd', 'dsg@gfs', '$2y$10$7tDemzaZXHwywPziWG35POBlCHtbQQXiloJwKMnVhYB4AkIfILmq2', 'sfdghsdh', 537357, '78547', 'public');
+INSERT INTO `signup` (`id`, `first_name`, `last_name`, `username`, `email`, `password`, `address`, `phone`, `zipcode`, `type`, `card`) VALUES
+(1, 'Md. Abu Horyra', 'Pranto', 'pranto', 'mahpranto@outlook.com', '$2y$10$/mwCn9fPLFBOLaJYNIqoguW.Wmg7ZexFAC.hPDMwRWEe5tmWybcA6', 'Bashundhara Residential Area', 1629710423, '1229', 'public', 382182575),
+(2, 'Shakib', 'Rahman', 'shakib', 'shakib@gmail.com', '$2y$10$Nx64OxTNaFlvdqOHFayGzeCmg9gl/lobMV1d9PeoG/ppflGBXkf/S', 'Bashundhara R/A', 1732533232, '1229', 'public', 0),
+(20, 'Sazzad', 'Hosaain', 'Risad482', 'sazzadrisad9@gmail.com', '$2y$10$VXPGH2oqPGcx48eP6aa3kuWjhgPbacTsuu05ye6efMrv7ju4UmKt.', 'Dhaka', 1673119301, '1230', 'public', 0),
+(22, 'Maruf', 'Siddique', 'Pipo9', 'abdul.karim@gmail.com', '$2y$10$EYiSuqsPNAPsRH6Ua1Cwk.b0n2LW.e47liuUbQVRjSNP/ZmsPc7Xi', '1/a sgsj', 1950092533, '1212', 'public', 0),
+(24, 'Niloy', 'Saha', 'niloy', 'niloysaha.887@gmail.com', '$2y$10$cZChBgfrziT.jZZTZHr6Uu.Uv6lQAKaExtgXQ5rkQqvLBx4ox62Ci', 'Gazipur', 1752836632, '1700', 'public', 0),
+(26, 'tareq', 'k', 'ktareq', 'kkk@gmail.com', '$2y$10$urRWit4ZPL7ktSKN5oAPS.6J4JXW77vJ2YcllwkRROq9o7W5FXXc.', 'mirpur', 17, '1216', 'public', 0),
+(29, 'fjyujy', 'iyti', 'mahpranto', 'gg@gmail.com', '$2y$10$IEy4HEBbbHrhHEuQZiqMteE66D3MY8PLApOg2QVPwoOggW0dsy.W2', '123', 123, '123', 'public', 0),
+(31, 'Ashraful', 'Alam', 'sagar', 'ashrafulx7@gmail.com', '$2y$10$XZ2gSxwufz2cTeSjvDW8oOFskCeKDPewjXQMW9TfBaAsbfW.vFbEi', 'Bashundhara', 1761037010, '1229', 'public', 0);
 
 -- --------------------------------------------------------
 
@@ -194,8 +219,8 @@ CREATE TABLE `tab` (
 INSERT INTO `tab` (`id`, `brand`, `name`, `des`, `stock`, `price`, `img_name`) VALUES
 (601, 'iPad', 'iPad Pro', 'good', 11, 130000, '156115098416798782495d0d4608895a6.jpg'),
 (602, 'iPad', 'iPad Mini', 'good', 10, 150000, '15611510231557869125d0d462f38e7e.jpg'),
-(603, 'Samsung', 'Samsung Galaxy Tab S', 'good', 3, 45000, '156115109013030193475d0d46725f153.jpg'),
-(604, 'Samsung', 'Samsung Galaxy Tab S4', 'good', 5, 65000, '15611511162953102805d0d468c49ab1.jpg');
+(603, 'Samsung', 'Galaxy Tab S', 'good', 3, 45000, '156115109013030193475d0d46725f153.jpg'),
+(604, 'Samsung', ' Galaxy Tab S4', 'good', 5, 65000, '15611511162953102805d0d468c49ab1.jpg');
 
 -- --------------------------------------------------------
 
@@ -218,9 +243,9 @@ CREATE TABLE `tv` (
 --
 
 INSERT INTO `tv` (`id`, `brand`, `name`, `des`, `stock`, `price`, `img_name`) VALUES
-(1001, 'Sony', 'Sony Bravia Android TV 4K', 'good', 12, 110000, '156115144020269277295d0d47d071b00.jpg'),
-(1002, 'Sony', 'Sony Bravia R520', 'good', 3, 70000, '156115146812290166405d0d47ecec9a1.jpg'),
-(1003, 'Samsung', 'Samsung Smart TV', 'good', 3, 130000, '15611515016132144035d0d480d371d7.jpg'),
+(1001, 'Sony', 'Android TV 4K', 'good', 12, 110000, '156115144020269277295d0d47d071b00.jpg'),
+(1002, 'Sony', ' Bravia R520', 'good', 3, 70000, '156115146812290166405d0d47ecec9a1.jpg'),
+(1003, 'Samsung', 'Smart TV', 'good', 3, 130000, '15611515016132144035d0d480d371d7.jpg'),
 (1004, 'Lg', 'LG QLED', 'good', 13, 130000, '156115153287281755d0d482c94afc.jpg');
 
 --
@@ -261,7 +286,10 @@ ALTER TABLE `phone`
 -- Indexes for table `signup`
 --
 ALTER TABLE `signup`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `phone` (`phone`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `tab`
@@ -301,7 +329,7 @@ ALTER TABLE `laptop`
 -- AUTO_INCREMENT for table `order_history`
 --
 ALTER TABLE `order_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=230;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `phone`
@@ -313,7 +341,7 @@ ALTER TABLE `phone`
 -- AUTO_INCREMENT for table `signup`
 --
 ALTER TABLE `signup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `tab`
